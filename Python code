@@ -1,0 +1,81 @@
+import nltk
+import re
+import heapq
+
+source_text = """Just A Rather Very Intelligent System a.k.a JARVIS is created by Tony Stark natural-language and a
+sophisticated artificial intelligence user interface computer system, named after Edwin Jarvis, the butler
+who worked for Howard Stark. Though its primary duty is to automate Stark’s Malibu estate, the lifelike
+program fulfills many other needs for Stark, like being an information source for him, a diagnostic tool, a
+consultant and a voice of reason in Stark’s life. It was also responsible to provide security for Tony
+Stark's Mansion and Stark Tower. After creating the Mark II armor, Stark uploaded JARVIS into all of
+the Iron Man Armors, as well as allowing him to interact with the other Avengers, giving them valuable
+information during combat. JARVIS may be the one intellect Stark feels most comfortable opening up to.
+JARVIS can object to Stark’s commands if necessary. JARVIS speaks with a refined British accent, and
+is capable of back talk, sarcasm and condescension. During the Ultron Offensive, JARVIS was destroyed
+by Ultron, although his remaining programming codes unknowingly continued to thwart Ultron's plans of
+gaining access to nuclear missiles. His remains were found by Stark, who uploaded them into a synthetic
+body made of vibranium and, in conjunction with Ultron's personality and an Infinity Stone. JARVIS'
+duties were then taken over by FRIDAY."""
+
+def clean_text(t1):
+    t1=re.sub(r'\[[0-9]*\]',' ',t1)               
+    t1=re.sub(r'\s+',' ',t1)
+    t2=t1
+    t2=re.sub('[^a-zA-Z]',' ',t1)       
+    t2=re.sub(r'\s+',' ',t1)
+    return t2
+    
+def nltk_summarizer(raw_text):
+    stopWords = set(nltk.corpus.stopwords.words("english"))
+    word_frequencies = {}  
+    for word in nltk.word_tokenize(raw_text):  
+        if word not in stopWords:
+            if word not in word_frequencies.keys():
+                word_frequencies[word] = 1
+            else:
+                word_frequencies[word] += 1
+                maximum_freqeuncy = max(word_frequencies.values())
+                
+    for word in word_frequencies.keys():
+        word_frequencies[word] = (word_frequencies[word]/maximum_freqeuncy)
+
+    sentence_list = nltk.sent_tokenize(raw_text)
+    sentence_scores = {}  
+    for sent in sentence_list:  
+        for word in nltk.word_tokenize(sent.lower()):
+            if word in word_frequencies.keys():
+                if len(sent.split(' ')) < 35:
+                    if sent not in sentence_scores.keys():
+                        sentence_scores[sent] = word_frequencies[word]
+                    else:
+                        sentence_scores[sent] += word_frequencies[word]
+
+
+
+    summary_sentences = heapq.nlargest(3, sentence_scores, key=sentence_scores.get)
+
+    summary = ' '.join(summary_sentences)  
+    return summary
+    
+nltk_summarizer(clean_text(text))
+
+Output 1: 20%
+"After creating the Mark II armor, Stark uploaded JARVIS into all of the Iron Man Armors, as well as allowing him to
+interact with the other Avengers, giving them valuable information during combat.
+During the Ultron Offensive, JARVIS was destroyed by Ultron, although his remaining programming codes unknowingly continued
+to thwart Ultron's plans of gaining access to nuclear missiles. 
+Just A Rather Very Intelligent System a.k.a JARVIS is created by Tony Stark natural-language and
+a sophisticated artificial intelligence user interface computer system, named
+after Edwin Jarvis, the butler who worked for Howard Stark."
+
+Output 2: 40%
+"Though its primary duty is to automate Stark’s Malibu estate, the lifelike program fulfills many other needs for Stark, 
+like being an information source for him, a diagnostic tool, a consultant and a voice of reason in Stark’s life. 
+After creating the Mark II armor, Stark uploaded JARVIS into all of the Iron Man Armors, as well as allowing him to interact 
+with the other Avengers, giving them valuable information during combat. During the Ultron Offensive, 
+JARVIS was destroyed by Ultron, although his remaining programming codes unknowingly continued to thwart Ultron's plans of 
+gaining access to nuclear missiles. Just A Rather Very Intelligent System a.k.a JARVIS is created by Tony Stark natural-language 
+and a sophisticated artificial intelligence user interface computer system, named after Edwin Jarvis, the butler who worked for 
+Howard Stark. His remains were found by Stark, who uploaded them into a synthetic body made of vibranium and, 
+in conjunction with Ultron's personality and an Infinity Stone. JARVIS speaks with a refined British accent, and is capable of 
+back talk, sarcasm and condescension."
