@@ -60,13 +60,11 @@ def nltk_summarizer(raw_text):
 nltk_summarizer(clean_text(text))
 
 Output 1: 20%
-"After creating the Mark II armor, Stark uploaded JARVIS into all of the Iron Man Armors, as well as allowing him to
-interact with the other Avengers, giving them valuable information during combat.
-During the Ultron Offensive, JARVIS was destroyed by Ultron, although his remaining programming codes unknowingly continued
-to thwart Ultron's plans of gaining access to nuclear missiles. 
-Just A Rather Very Intelligent System a.k.a JARVIS is created by Tony Stark natural-language and
-a sophisticated artificial intelligence user interface computer system, named
-after Edwin Jarvis, the butler who worked for Howard Stark."
+"After creating the Mark II armor, Stark uploaded JARVIS into all of the Iron Man Armors, as well as allowing him to interact with the 
+other Avengers, giving them valuable information during combat.During the Ultron Offensive, JARVIS was destroyed by Ultron, although his 
+remaining programming codes unknowingly continued to thwart Ultron's plans of gaining access to nuclear missiles. Just A Rather 
+Very Intelligent System a.k.a JARVIS is created by Tony Stark natural-language and a sophisticated artificial intelligence user 
+interface computer system, named after Edwin Jarvis, the butler who worked for Howard Stark."
 
 Output 2: 40%
 "Though its primary duty is to automate Stark’s Malibu estate, the lifelike program fulfills many other needs for Stark, 
